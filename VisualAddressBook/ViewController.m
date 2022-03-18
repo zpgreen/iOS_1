@@ -18,6 +18,7 @@
 @synthesize nameTextField;
 @synthesize genreTextField;
 @synthesize authorTextField;
+@synthesize countLabel;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -47,6 +48,8 @@
     [mybook addBook:book1];
     [mybook addBook:book2];
     [mybook addBook:book3];
+    
+    countLabel.text = [NSString stringWithFormat:@"%li",[mybook countBook]];
     // Do any additional setup after loading the view.
 }
 -(IBAction)showAllBookAction:(id)sender{
@@ -55,7 +58,33 @@
 }
 -(IBAction)addBookAction:(id)sender{
     Book *bookTemp = [[Book alloc]init];
+    bookTemp.name = nameTextField.text;
+    bookTemp.genre = genreTextField.text;
+    bookTemp.author = authorTextField.text;
     
+    [mybook addBook:bookTemp];
+    countLabel.text = [NSString stringWithFormat:@"%li",[mybook countBook]];
+    resultTextView.text = @"책이 추가 됐습니다.";
+}
+-(IBAction)findBookAction:(id)sender{
+    NSString *strTemp = [mybook findBook:nameTextField.text];
+    if(strTemp != nil){
+        resultTextView.text = strTemp;
+    }else{
+        resultTextView.text = @"찾으시는 책이 없습니다";
+    }
+}
+-(IBAction)removeBookAction:(id)sender{
+    NSString *strTemp = [mybook removeBook:nameTextField.text];
+    if(strTemp != nil){
+        NSMutableString *str = [[NSMutableString alloc]init];
+        [str appendString:strTemp];
+        [str appendString:@"책이 지워졌습니다"];
+        resultTextView.text = str;
+        countLabel.text = [NSString stringWithFormat:@"%li",[mybook countBook]];
+    }else{
+        resultTextView.text = @"지우려는 책이 없습니다";
+    }
 }
 
 @end
